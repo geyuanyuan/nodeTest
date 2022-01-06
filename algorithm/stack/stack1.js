@@ -15,8 +15,8 @@ function convert(str){
      * [ 入栈
      * ] 出栈
      */
-    let stack1=[]
-    let stack2=[]
+    let stack1=[''] //存放数字
+    let stack2=[''] //存放字符串
 
     // for(let i=0;i<str.length;i++){
     //     let currentStr = str[i]
@@ -27,11 +27,37 @@ function convert(str){
 
     var left = str
     while(left){
-        
-        left = left.substr(0,1)
+        if(/^\d+/.test(left)){
+            let num = left.match(/^(\d+)/)[0]
+            left = left.substring(num.length,left.length)
+            stack1.push(num)
+            stack2.push('')
+            // console.log(left)
+            // console.log(stack1,stack2)
+        }else if(/^[a-zA-Z]+/.test(left)){
+            let str = left.match(/^([a-zA-Z]+)/)[0]
+            left = left.substring(str.length,left.length)
+            // stack2.push(str)
+            stack2[stack2.length-1] = str
+            // console.log(left)
+            // console.log(stack1,stack2)
+        }else if(left.startsWith('[')){
+            left = left.substring(1,left.length)
+            // console.log(left)
+        }else if(left.startsWith(']')){
+            left = left.substring(1,left.length)
+            let delNum = stack1.pop()
+            let delStr = stack2.pop()
+            if(delStr){
+                // console.log(delStr.repeat(delNum))
+                stack2[stack2.length-1]+= delStr.repeat(delNum)
+            }
+            // console.log(left)
+            // console.log(stack1,stack2)
+        }
     }
-
-
+    // console.log(stack2,stack1)
+    return stack2[0]
 }
 
-convert('2[1[b]2[c]]')
+console.log(convert('2[3[b]2[ac]]'))
